@@ -1,20 +1,54 @@
 ---
+# This is the main pipeline file that orchestrates all our test approaches
 steps:
-    # 1. Use multiple docker compose files with different dependency
-    # configurations (preferred).
-  - label: ':docker: Multiple Docker Compose Files'
-    command: |
-      cd multi-compose
-      buildkite-agent pipeline upload ./pipeline.yml
-    # 2. Use the plugin's 'config' option to specify different compose
-    # files for different steps.
-  - label: ':robot: Dependencies Control'
-    command: |
-      cd deps-ctrl
-      buildkite-agent pipeline upload ./pipeline.yml
-    # 3. Control which services start using the plugin's dependency: false
-    # option and manually manage service startup. (more control)
-  - label: ':wave: Manual Services Control'
-    command: |-
-      cd manual-serv-ctrl
-      buildkite-agent pipeline upload ./pipeline.yml
+  # Testing Multiple Docker Compose Files Approach
+  - label: ':docker: Multiple Compose Files'
+    dir: multi-compose  # Changes working directory before running commands
+    plugins:
+      - docker-compose#v4.14.0:
+          config: [docker-compose.yml, docker-compose.unit.yml]
+          run: app
+          command: [npm, run, test:unit]
+  - label: ':docker: :postgresql: Multiple Compose Files - Integration'
+    dir: multi-compose
+    plugins:
+      - docker-compose#v4.14.0:
+          config: [docker-compose.yml, docker-compose.integration.yml]
+          run: app
+          command: [npm, run, test:integration]
+
+  # Testing Dependencies Control Approach
+  - label: ':docker: Dependencies Control - Unit Tests'
+    dir: deps-ctrl
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          dependencies: false
+          command: [npm, run, test:unit]
+  - label: ':docker: Dependencies Control - DB Tests'
+    dir: deps-ctrl
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          dependencies: true
+          command: [npm, run, test:db]
+
+  # Testing Manual Service Control Approach
+  - label: ':docker: Manual Service Control - Unit Tests'
+    dir: manual-serv-ctrl
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          command: [npm, run, test:unit]
+  - label: ':docker: :postgresql: Manual Service Control - Integration'
+    dir: manual-serv-ctrl
+    commands:
+      # Start the database first
+      - cd manual-serv-ctrl  # We need to change directory before docker compose commands
+      - docker compose up -d db
+      # Wait for database to be ready
+      - docker compose run --rm app /bin/sh -c "until nc -z db 5432; do sleep 1; done"
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          command: [npm, run, test:integration]
