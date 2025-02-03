@@ -3,14 +3,14 @@
 steps:
   # Testing Multiple Docker Compose Files Approach
   - label: ':docker: Multiple Compose Files'
-    dir: multi-compose  # Changes working directory before running commands
+    working_directory: multi-compose
     plugins:
       - docker-compose#v4.14.0:
           config: [docker-compose.yml, docker-compose.unit.yml]
           run: app
           command: [npm, run, test:unit]
   - label: ':docker: :postgresql: Multiple Compose Files - Integration'
-    dir: multi-compose
+    working_directory: multi-compose
     plugins:
       - docker-compose#v4.14.0:
           config: [docker-compose.yml, docker-compose.integration.yml]
@@ -19,14 +19,14 @@ steps:
 
   # Testing Dependencies Control Approach
   - label: ':docker: Dependencies Control - Unit Tests'
-    dir: deps-ctrl
+    working_directory: deps-ctrl
     plugins:
       - docker-compose#v4.14.0:
           run: app
           dependencies: false
           command: [npm, run, test:unit]
   - label: ':docker: Dependencies Control - DB Tests'
-    dir: deps-ctrl
+    working_directory: deps-ctrl
     plugins:
       - docker-compose#v4.14.0:
           run: app
@@ -35,16 +35,15 @@ steps:
 
   # Testing Manual Service Control Approach
   - label: ':docker: Manual Service Control - Unit Tests'
-    dir: manual-serv-ctrl
+    working_directory: manual-serv-ctrl
     plugins:
       - docker-compose#v4.14.0:
           run: app
           command: [npm, run, test:unit]
   - label: ':docker: :postgresql: Manual Service Control - Integration'
-    dir: manual-serv-ctrl
+    working_directory: manual-serv-ctrl
     commands:
       # Start the database first
-      - cd manual-serv-ctrl  # We need to change directory before docker compose commands
       - docker compose up -d db
       # Wait for database to be ready
       - docker compose run --rm app /bin/sh -c "until nc -z db 5432; do sleep 1; done"
