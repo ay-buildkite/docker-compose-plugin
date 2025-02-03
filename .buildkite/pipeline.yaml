@@ -1,4 +1,4 @@
 ---
 steps:
   - label: ':all-the-things: All The Things'
-    command: ./pipeline.sh | buildkite-agent pipeline upload
+    command: .buildkite/pipeline.sh | buildkite-agent pipeline upload
