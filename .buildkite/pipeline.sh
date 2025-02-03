@@ -66,6 +66,11 @@ generate_manual_ctrl_config() {
 YAML
 }
 
+# Add debug output by redirecting to stderr
+echo "Debug: Starting pipeline generation" >&2
+pwd >&2
+ls -la >&2
+
 # Begin generating the pipeline
 cat <<YAML
 steps:
@@ -76,8 +81,10 @@ cd ..
 
 # Generate pipeline conf for each approach
 for approach_dir in */; do
+    echo "Debug: Found directory: $approach_dir" >&2
     # Skip any dotfiles or other config types
     if [[ "$approach_dir" =~ ^(\.|_) ]]; then
+        echo "Debug: Skipping $approach_dir" >&2
         continue
     fi
     
