@@ -5,16 +5,16 @@ steps:
   - label: ':docker: Multiple Docker Compose Files'
     command: |
       cd multi-compose
-      buildkite-agent pipeline upload multi-compose/pipeline.yml
+      buildkite-agent pipeline upload ./pipeline.yml
     # 2. Use the plugin's 'config' option to specify different compose
     # files for different steps.
   - label: ':robot: Dependencies Control'
     command: |
       cd deps-ctrl
-      buildkite-agent pipeline upload deps-ctrl/pipeline.yml
+      buildkite-agent pipeline upload ./pipeline.yml
     # 3. Control which services start using the plugin's dependency: false
     # option and manually manage service startup. (more control)
   - label: ':wave: Manual Services Control'
     command: |-
       cd manual-serv-ctrl
-      buildkite-agent pipeline upload manual-serv-ctrl/pipeline.yml
+      buildkite-agent pipeline upload ./pipeline.yml
