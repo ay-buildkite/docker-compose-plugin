@@ -1,4 +1,3 @@
-```markdown
 # Docker Compose Plugin Examples
 
 This repository demonstrates different approaches for managing service dependencies in Buildkite pipelines using the Docker Compose plugin.
@@ -16,4 +15,3 @@ Showcases manual service orchestration by explicitly starting and waiting for re
 
 ## Usage
 See individual directories for specific implementation details. Pipeline examples assume a Node.js application needing PostgreSQL for integration tests.
-```
