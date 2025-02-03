@@ -76,9 +76,6 @@ cat <<YAML
 steps:
 YAML
 
-# Get back to root dir
-cd ..
-
 # Generate pipeline conf for each approach
 for approach_dir in */; do
     echo "Debug: Found directory: $approach_dir" >&2
