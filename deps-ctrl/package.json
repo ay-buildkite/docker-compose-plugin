@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test:unit": "echo 'Running unit tests'",
+    "test:integration": "echo 'Running integration tests'",
+    "test:db": "echo 'Running database tests'",
+    "test:cache": "echo 'Running cache tests'"
+  }
+}

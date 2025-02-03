@@ -1,0 +1,5 @@
+---
+# Configs for unit testing - no deps needed
+services:
+  app:
+    environment: [NODE_ENV=test]

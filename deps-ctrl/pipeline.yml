@@ -1,0 +1,16 @@
+---
+steps:
+  # Unit tests - run without dependencies
+  - label: ':nodejs: Unit Tests'
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          dependencies: false
+          command: [npm, run, test:unit]
+  # DB tests - run only w/ db
+  - label: ':nodejs: :postgresql: DB Tests'
+    plugins:
+      - docker-compose#v4.14.0:
+          run: app
+          dependencies: false
+          command: [npm, run, test:db]

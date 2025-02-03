@@ -1,0 +1,12 @@
+---
+# Confs with all services but no automatic deps
+services:
+  app:
+    image: node:18-alpine
+    working_dir: /app
+    volumes: [.:/app]
+    environment: [NODE_ENV=test]
+  db:
+    image: postgres:14-alpine
+    environment: [POSTGRES_USER=test, POSTGRES_PASSWORD=test]
+  redis: redis:7-alpine

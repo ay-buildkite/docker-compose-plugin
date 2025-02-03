@@ -1,0 +1,10 @@
+---
+# Base config shares across all steps
+services:
+  app:
+    # Using lightweight Node.js image as our app base
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    # No dependencies by default

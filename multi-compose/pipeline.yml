@@ -1,0 +1,16 @@
+---
+steps:
+  # Unit test step = uses base config only
+  - label: :nodejs Unit Tests
+    plugins:
+      - docker-compose#v4.14.0:
+          config: [docker-compose.yml, docker-compose.unit.yml]
+          run: app
+          command: [npm, run, test:unit]
+  # Integrations tests uses config w/ db deps
+  - label:
+    plugins:
+      - docker-compose#v4.14.0:
+          config: [docker-compose.yml, docker-compose.integration.yml]
+          run: app
+          command: [npm, run, test:integration]
